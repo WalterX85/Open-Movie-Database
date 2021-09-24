@@ -10,21 +10,31 @@ const App = () => {
     isSearching: false,
     active: "search",
     movies: [{}, {}],
-    query: ""
+    query: "",
+    favorites: []
   });
 
   const onTextChange = input => {
     setState({ ...state, isSearching : input.length > 0, query: input });
     console.log(input);
   }
-
+  const handleClick = link => {
+    setState({...state, active : link})
+  }
+  const toggleFavorite = () => {
+    if (state.active === 'search') {
+      setState({...state, favorites: state.favorites.concat({})})
+    } else {
+      setState({...state, favorites: [state.favorites.pop()] })
+    }
+  }
   return (
     <div className="App" id="search-container">
       <Header />
-      <Links />
+      <Links {...state} handleClick={handleClick}/>
       <main>
         <SearchForm onTextChange={onTextChange}/>
-        <Results {...state}/>
+        <Results {...state} toggleFavorite={toggleFavorite}/>
       </main>
     </div>
   );

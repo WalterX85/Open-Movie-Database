@@ -35,18 +35,22 @@ export const Modal = props => (
   </div>
 );
 
-const Links = props => (
+const Links = ({ active, handleClick }) => (
   <nav>
     {["search", "favorites"].map(link => {
-      return <a>{link.toUpperCase()}</a>;
+      // eslint-disable-next-line jsx-a11y/anchor-is-valid
+      return <a className={`hover ${active === link && 'active'}`} onClick={() => handleClick(link)}>{link.toUpperCase()}</a>;
     })}
   </nav>
 );
 
-const FavoriteBtn = props => {
+const FavoriteBtn = ({toggleFavorite, active}) => {
   const [isFavorite, setFavorite] = useState(false);
   return (
-    <button className={isFavorite ? 'favorite' : 'not-favorite'} onClick={() => setFavorite(!isFavorite)}>
+    <button className={isFavorite ? 'favorite' : 'not-favorite'} onClick={() => {
+      toggleFavorite()
+      setFavorite(!isFavorite)
+    }}>
       {isFavorite ? 
       <Fragment>
         <i className="fas fa-star"></i><span>&nbsp;Remove</span>
@@ -60,7 +64,7 @@ const FavoriteBtn = props => {
   );
 };
 
-const Result = props => {
+const Result = ({toggleFavorite, active}) => {
   return (
     <article className="movie d-flex">
       <div className="p-4 movie d-flex flex-fill">
@@ -82,7 +86,7 @@ const Result = props => {
           <p>tt0390521</p>
         </div>
       </div>
-      <FavoriteBtn flex="p-1" />
+      <FavoriteBtn flex="p-1" toggleFavorite={toggleFavorite} active={active}/>
     </article>
   );
 };
@@ -106,15 +110,20 @@ const SearchForm = ({ onTextChange }) => {
   );
 };
 
-const Results = ({ movies, isSearching, active }) => {
-  if (active === "favorites") {
+const Results = ({ movies, favorites, isSearching, active, toggleFavorite }) => {
+  if (active === "favorites" && favorites.length < 0) {
     return <p>No Favorites in the list :(</p>;
+  }
+  if (active === "favorites" && favorites.length > 0) {
+    return favorites.map(favorite => {
+      return <Result toggleFavorite={toggleFavorite} active={active}/>;
+    })
   }
   if (!isSearching) {
     return <p>No results :(</p>;
   }
   return movies.map(movie => {
-    return <Result />;
+    return <Result toggleFavorite={toggleFavorite}/>;
   });
 };
 export { Links, Results, SearchForm };
