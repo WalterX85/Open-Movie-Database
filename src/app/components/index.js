@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, Fragment } from "react";
 
 export const Header = props => {
   return (
@@ -44,9 +44,18 @@ const Links = props => (
 );
 
 const FavoriteBtn = props => {
+  const [isFavorite, setFavorite] = useState(false);
   return (
-    <button className="not-favorite">
-      <i className="fas fa-star"></i>&nbsp; Add Favorites
+    <button className={isFavorite ? 'favorite' : 'not-favorite'} onClick={() => setFavorite(!isFavorite)}>
+      {isFavorite ? 
+      <Fragment>
+        <i className="fas fa-star"></i><span>&nbsp;Remove</span>
+      </Fragment> :
+      <Fragment>
+        <i className="far fa-star"></i><span>&nbsp;Add Favorites</span>
+      </Fragment>
+    }
+
     </button>
   );
 };
