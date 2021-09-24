@@ -14,7 +14,7 @@ const App = () => {
   });
 
   const onTextChange = input => {
-    setState({ ...state, isSearching : input.length > 0})
+    setState({ ...state, isSearching : input.length > 0, query: input });
     console.log(input);
   }
 
