@@ -86,6 +86,7 @@ const SearchForm = ({ onTextChange }) => {
           id="title"
           placeholder="Search movie title..."
           defaultValue=""
+          onChange={e => onTextChange(e.target.value)}
         />
         <button type="submit" className="btn btn-danger">
           <i className="fas fa-search"></i>
@@ -96,14 +97,14 @@ const SearchForm = ({ onTextChange }) => {
   );
 };
 
-const Results = ({ results, isSearching, activeLink }) => {
-  if (activeLink === "favorites") {
+const Results = ({ movies, isSearching, active }) => {
+  if (active === "favorites") {
     return <p>No Favorites in the list :(</p>;
   }
   if (!isSearching) {
     return <p>No results :(</p>;
   }
-  return results.map(movie => {
+  return movies.map(movie => {
     return <Result />;
   });
 };
